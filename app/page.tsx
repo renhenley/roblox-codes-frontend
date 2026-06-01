@@ -9,7 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     async function getGames() {
-      const res = await fetch("http://localhost:1337/api/games?populate=*");
+      const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*");
       const data = await res.json();
 
       setGames(data.data || []);
@@ -62,7 +62,7 @@ export default function Home() {
                 >
                   {game.thumbnail?.url ? (
   <img
-    src={`http://localhost:1337${game.thumbnail.url}`}
+    src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
     alt={game.name}
     className="w-full h-48 object-cover bg-gray-200"
   />
