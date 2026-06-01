@@ -1,5 +1,5 @@
 export default async function sitemap() {
-  const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*", {
+  const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*&pagination[pageSize]=500", {
     cache: "no-store",
   });
 

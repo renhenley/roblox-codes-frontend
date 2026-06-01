@@ -9,7 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     async function getGames() {
-      const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*");
+      const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*&pagination[pageSize]=500");
       const data = await res.json();
 
       setGames(data.data || []);
