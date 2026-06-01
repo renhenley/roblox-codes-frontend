@@ -104,7 +104,7 @@ export default function Home() {
             >
               {game.thumbnail?.url ? (
   <img
-    src={`http://localhost:1337${game.thumbnail.url}`}
+    src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
     alt={game.name}
     className="w-full h-44 object-cover bg-gray-200"
   />

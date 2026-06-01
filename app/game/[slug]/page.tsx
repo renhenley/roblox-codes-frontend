@@ -2,7 +2,7 @@ import CopyButton from "../../components/CopyButton";
 
 async function getGame(slug: string) {
   const res = await fetch(
-    `http://localhost:1337/api/games?filters[slug][$eq]=${slug}&populate=*`,
+    `https://roblox-codes-backend-production.up.railway.app/api/games?filters[slug][$eq]=${slug}&populate=*`,
     {
       cache: "no-store",
     }

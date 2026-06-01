@@ -1,5 +1,5 @@
 export default async function sitemap() {
-  const res = await fetch("http://localhost:1337/api/games?populate=*", {
+  const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*", {
     cache: "no-store",
   });
 
