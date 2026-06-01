@@ -3,13 +3,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const PAGE_SIZE = 24;
+
 export default function Home() {
   const [games, setGames] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
     async function getGames() {
-      const res = await fetch("https://roblox-codes-backend-production.up.railway.app/api/games?populate=*&pagination[pageSize]=500");
+      const res = await fetch(
+        "https://roblox-codes-backend-production.up.railway.app/api/games?populate=*&pagination[pageSize]=500"
+      );
       const data = await res.json();
 
       setGames(data.data || []);
@@ -18,13 +23,18 @@ export default function Home() {
     getGames();
   }, []);
 
-  const featuredGames = games.filter(
-    (game: any) => game.featured === true
-  );
+  const featuredGames = games.filter((game: any) => game.featured === true);
 
   const filteredGames = games.filter((game: any) =>
     game.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const visibleGames = filteredGames.slice(0, visibleCount);
+
+  function handleSearch(value: string) {
+    setSearch(value);
+    setVisibleCount(PAGE_SIZE);
+  }
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -43,11 +53,11 @@ export default function Home() {
           type="text"
           placeholder="Search Roblox games..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           className="w-full mb-10 p-4 rounded-xl border text-black text-lg"
         />
 
-        {featuredGames.length > 0 && (
+        {search.length === 0 && featuredGames.length > 0 && (
           <>
             <h2 className="text-3xl font-bold mb-6 text-black">
               Featured Games
@@ -61,16 +71,16 @@ export default function Home() {
                   className="bg-white rounded-xl shadow-md overflow-hidden block hover:shadow-lg transition"
                 >
                   {game.thumbnail?.url ? (
-  <img
-    src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
-    alt={game.name}
-    className="w-full h-48 object-cover bg-gray-200"
-  />
-) : (
-  <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-    Featured Image
-  </div>
-)}
+                    <img
+                      src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
+                      alt={game.name}
+                      className="w-full h-48 object-cover bg-gray-200"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                      Featured Image
+                    </div>
+                  )}
 
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-black">
@@ -92,27 +102,27 @@ export default function Home() {
         )}
 
         <h2 className="text-3xl font-bold mb-6 text-black">
-          All Games
+          {search ? "Search Results" : "All Games"}
         </h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGames.map((game: any) => (
+          {visibleGames.map((game: any) => (
             <Link
               href={`/game/${game.slug}`}
               key={game.id}
               className="bg-white rounded-xl shadow-md overflow-hidden block hover:shadow-lg transition"
             >
               {game.thumbnail?.url ? (
-  <img
-    src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
-    alt={game.name}
-    className="w-full h-44 object-cover bg-gray-200"
-  />
-) : (
-  <div className="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">
-    Game Image
-  </div>
-)}
+                <img
+                  src={`https://roblox-codes-backend-production.up.railway.app${game.thumbnail.url}`}
+                  alt={game.name}
+                  className="w-full h-44 object-cover bg-gray-200"
+                />
+              ) : (
+                <div className="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">
+                  Game Image
+                </div>
+              )}
 
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-black">
@@ -134,6 +144,21 @@ export default function Home() {
             </Link>
           ))}
         </div>
+
+        {visibleGames.length === 0 && (
+          <p className="text-gray-600 mt-6">No games found.</p>
+        )}
+
+        {visibleCount < filteredGames.length && (
+          <div className="text-center mt-10">
+            <button
+              onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
