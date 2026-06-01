@@ -9,7 +9,6 @@ async function getGame(slug: string) {
   );
 
   const data = await res.json();
-
   return data.data[0];
 }
 
@@ -35,7 +34,6 @@ export default async function GamePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
   const game = await getGame(slug);
 
   if (!game) {
@@ -43,14 +41,12 @@ export default async function GamePage({
   }
 
   const activeCodes =
-    game.codes?.filter(
-      (code: any) => code.verificationStatus === "working"
-    ) || [];
+    game.codes?.filter((code: any) => code.verificationStatus === "working") ||
+    [];
 
   const expiredCodes =
-    game.codes?.filter(
-      (code: any) => code.verificationStatus === "expired"
-    ) || [];
+    game.codes?.filter((code: any) => code.verificationStatus === "expired") ||
+    [];
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -131,7 +127,7 @@ export default async function GamePage({
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6 mb-8">
+        <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold text-black mb-3">
             How to Redeem Codes
           </h2>
@@ -141,34 +137,7 @@ export default async function GamePage({
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold text-black mb-4">
-            Frequently Asked Questions
-          </h2>
-
-          <div className="space-y-5">
-            {game.faq1Question && game.faq1Answer && (
-              <div>
-                <h3 className="font-bold text-black">{game.faq1Question}</h3>
-                <p className="text-gray-700 mt-1">{game.faq1Answer}</p>
-              </div>
-            )}
-
-            {game.faq2Question && game.faq2Answer && (
-              <div>
-                <h3 className="font-bold text-black">{game.faq2Question}</h3>
-                <p className="text-gray-700 mt-1">{game.faq2Answer}</p>
-              </div>
-            )}
-
-            {game.faq3Question && game.faq3Answer && (
-              <div>
-                <h3 className="font-bold text-black">{game.faq3Question}</h3>
-                <p className="text-gray-700 mt-1">{game.faq3Answer}</p>
-              </div>
-            )}
-          </div>
-        </div>
+       
       </div>
     </main>
   );
